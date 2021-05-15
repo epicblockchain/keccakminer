@@ -5,7 +5,7 @@
 
 #include <boost/dll.hpp>
 
-#include <libethcore/Farm.h>
+#include <libkeccakcore/Farm.h>
 #include <ethash/ethash.hpp>
 
 #include "CLMiner.h"
@@ -758,7 +758,7 @@ bool CLMiner::initEpoch_internal()
         // patch source code
         // note: The kernels here are simply compiled version of the respective .cl kernels
         // into a byte array by bin2h.cmake. There is no need to load the file by hand in runtime
-        // See libethash-cl/CMakeLists.txt: add_custom_command()
+        // See libkeccak-cl/CMakeLists.txt: add_custom_command()
         // TODO: Just use C++ raw string literal.
         string code;
 

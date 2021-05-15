@@ -8,8 +8,8 @@
 
 #include <json/json.h>
 
-#include <libethcore/Farm.h>
-#include <libethcore/Miner.h>
+#include <libkeccakcore/Farm.h>
+#include <libkeccakcore/Miner.h>
 #include <libpoolprotocols/PoolManager.h>
 
 using namespace dev;

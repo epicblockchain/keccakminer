@@ -2,7 +2,7 @@
 
 #include <keccakminer/buildinfo.h>
 
-#include <libethcore/Farm.h>
+#include <libkeccakcore/Farm.h>
 
 #ifndef HOST_NAME_MAX
 #define HOST_NAME_MAX 255

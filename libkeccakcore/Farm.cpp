@@ -16,18 +16,18 @@
  */
 
 
-#include <libethcore/Farm.h>
+#include <libkeccakcore/Farm.h>
 
 #if ETC_KECCAKCL
-#include <libethash-cl/CLMiner.h>
+#include <libkeccak-cl/CLMiner.h>
 #endif
 
 #if ETC_KECCAKCUDA
-#include <libethash-cuda/CUDAMiner.h>
+#include <libkeccak-cuda/CUDAMiner.h>
 #endif
 
 #if ETC_KECCAKCPU
-#include <libethash-cpu/CPUMiner.h>
+#include <libkeccak-cpu/CPUMiner.h>
 #endif
 
 namespace dev

@@ -29,7 +29,7 @@ along with keccakminer.  If not, see <http://www.gnu.org/licenses/>.
 #include <unistd.h>
 #endif
 
-#include <libethcore/Farm.h>
+#include <libkeccakcore/Farm.h>
 #include <ethash/ethash.hpp>
 
 #include <boost/version.hpp>

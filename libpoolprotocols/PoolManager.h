@@ -5,8 +5,8 @@
 #include <json/json.h>
 
 #include <libdevcore/Worker.h>
-#include <libethcore/Farm.h>
-#include <libethcore/Miner.h>
+#include <libkeccakcore/Farm.h>
+#include <libkeccakcore/Miner.h>
 
 #include "PoolClient.h"
 #include "getwork/EthGetworkClient.h"

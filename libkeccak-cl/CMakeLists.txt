@@ -1,6 +1,6 @@
 # A custom command and target to turn the OpenCL kernel into a byte array header
 # The normal build depends on it properly and if the kernel file is changed, then
-# a rebuild of libethash-cl should be triggered
+# a rebuild of libkeccak-cl should be triggered
 
 #TODO: clean up the copy&pasting here
 add_custom_command(

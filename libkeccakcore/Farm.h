@@ -32,7 +32,7 @@
 #include <libdevcore/Common.h>
 #include <libdevcore/Worker.h>
 
-#include <libethcore/Miner.h>
+#include <libkeccakcore/Miner.h>
 
 #include <libhwmon/wrapnvml.h>
 #if defined(__linux)

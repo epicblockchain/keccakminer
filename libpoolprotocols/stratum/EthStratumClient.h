@@ -12,9 +12,9 @@
 
 #include <libdevcore/FixedHash.h>
 #include <libdevcore/Log.h>
-#include <libethcore/EthashAux.h>
-#include <libethcore/Farm.h>
-#include <libethcore/Miner.h>
+#include <libkeccakcore/EthashAux.h>
+#include <libkeccakcore/Farm.h>
+#include <libkeccakcore/Miner.h>
 
 #include "../PoolClient.h"
 

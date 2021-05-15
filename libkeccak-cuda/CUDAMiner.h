@@ -20,8 +20,8 @@ along with keccakminer.  If not, see <http://www.gnu.org/licenses/>.
 #include "ethash_cuda_miner_kernel.h"
 
 #include <libdevcore/Worker.h>
-#include <libethcore/EthashAux.h>
-#include <libethcore/Miner.h>
+#include <libkeccakcore/EthashAux.h>
+#include <libkeccakcore/Miner.h>
 
 #include <functional>
 

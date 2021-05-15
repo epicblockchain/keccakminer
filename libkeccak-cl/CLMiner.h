@@ -8,8 +8,8 @@
 #include <fstream>
 
 #include <libdevcore/Worker.h>
-#include <libethcore/EthashAux.h>
-#include <libethcore/Miner.h>
+#include <libkeccakcore/EthashAux.h>
+#include <libkeccakcore/Miner.h>
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
