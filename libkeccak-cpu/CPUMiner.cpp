@@ -1,18 +1,18 @@
 /*
-This file is part of ethminer.
+This file is part of keccakminer.
 
-ethminer is free software: you can redistribute it and/or modify
+keccakminer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-ethminer is distributed in the hope that it will be useful,
+keccakminer is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with ethminer.  If not, see <http://www.gnu.org/licenses/>.
+along with keccakminer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*
@@ -247,7 +247,7 @@ bool CPUMiner::initEpoch_internal()
    Miner should stop working on the current block
    This happens if a
      * new work arrived                       or
-     * miner should stop (eg exit ethminer)   or
+     * miner should stop (eg exit keccakminer)   or
      * miner should pause
 */
 void CPUMiner::kick_miner()

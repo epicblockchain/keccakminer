@@ -46,12 +46,12 @@ build_script:
   - cmake %CMAKE_ARGS%
   - cmake --build build --config Release --target package
   - ps: |
-      . build/ethminer/buildinfo.ps1
-      mv build/ethminer.zip build/$env:project_name-$env:project_version-cuda$env:CUDA_VER-$env:system_name-$env:system_processor.zip
+      . build/keccakminer/buildinfo.ps1
+      mv build/keccakminer.zip build/$env:project_name-$env:project_version-cuda$env:CUDA_VER-$env:system_name-$env:system_processor.zip
 
 artifacts:
-  - path: build/ethminer-*.zip
-    name: ethminer
+  - path: build/keccakminer-*.zip
+    name: keccakminer
 
 deploy:
   # Create GitHub release, also set the release name and description.
@@ -62,7 +62,7 @@ deploy:
   force_update: true  # Force update in case Travis CI created the release before.
   prerelease: $(project_version_is_prerelease)
   draft: false
-  artifact: ethminer
+  artifact: keccakminer
   auth_token:
     secure: uDRcvbW+9GIyKlZ9guJfWOQ6jg0An6eULg6mEkYgdKn/GVNpYSKvO5oHxP0U8a+e
   on:

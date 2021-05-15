@@ -19,7 +19,7 @@ HunterGate(
     LOCAL
 )
 
-project(ethminer)
+project(keccakminer)
 set(PROJECT_VERSION 0.19.0)
 
 cable_set_build_type(DEFAULT Release CONFIGURATION_TYPES Release RelWithDebInfo)
@@ -119,7 +119,7 @@ if (APICORE)
     add_subdirectory(libapicore)
 endif()
 
-add_subdirectory(ethminer)
+add_subdirectory(keccakminer)
 
 
 if(WIN32)
