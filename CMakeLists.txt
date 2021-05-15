@@ -91,7 +91,7 @@ message("-- USE_SYS_OPENCL   Build with system OpenCL                     ${USE_
 message("----------------------------------------------------------------------------")
 message("")
 
-include(EthCompilerSettings)
+include(CompilerSettings)
 if(UNIX AND NOT APPLE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++")
 endif()

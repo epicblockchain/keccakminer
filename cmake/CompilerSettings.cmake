@@ -1,6 +1,6 @@
 # Set necessary compile and link flags
 
-include(EthCheckCXXFlags)
+include(CheckCXXFlags)
 
 # C++11 check and activation
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
