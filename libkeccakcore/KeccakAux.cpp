@@ -15,14 +15,14 @@
     along with keccakminer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "EthashAux.h"
+#include "KeccakAux.h"
 
 #include <ethash/ethash.hpp>
 
 using namespace dev;
 using namespace eth;
 
-Result EthashAux::eval(int epoch, h256 const& _headerHash, uint64_t _nonce) noexcept
+Result KeccakAux::eval(int epoch, h256 const& _headerHash, uint64_t _nonce) noexcept
 {
     auto headerHash = ethash::hash256_from_bytes(_headerHash.data());
     auto& context = ethash::get_global_epoch_context(epoch);

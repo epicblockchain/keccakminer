@@ -8,7 +8,7 @@
 #include <fstream>
 
 #include <libdevcore/Worker.h>
-#include <libkeccakcore/EthashAux.h>
+#include <libkeccakcore/KeccakAux.h>
 #include <libkeccakcore/Miner.h>
 
 #include <boost/algorithm/string/predicate.hpp>

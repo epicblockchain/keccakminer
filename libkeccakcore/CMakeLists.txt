@@ -1,5 +1,5 @@
 set(SOURCES
-	EthashAux.h EthashAux.cpp
+	KeccakAux.h KeccakAux.cpp
 	Farm.cpp Farm.h
 	Miner.h Miner.cpp
 )

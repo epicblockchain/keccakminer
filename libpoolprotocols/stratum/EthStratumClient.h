@@ -12,7 +12,7 @@
 
 #include <libdevcore/FixedHash.h>
 #include <libdevcore/Log.h>
-#include <libkeccakcore/EthashAux.h>
+#include <libkeccakcore/KeccakAux.h>
 #include <libkeccakcore/Farm.h>
 #include <libkeccakcore/Miner.h>
 

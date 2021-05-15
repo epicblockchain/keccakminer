@@ -33,7 +33,7 @@ struct Result
     h256 mixHash;
 };
 
-class EthashAux
+class KeccakAux
 {
 public:
     static Result eval(int epoch, h256 const& _headerHash, uint64_t _nonce) noexcept;
