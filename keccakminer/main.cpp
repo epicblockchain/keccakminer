@@ -25,13 +25,13 @@
 #endif
 
 #include <libethcore/Farm.h>
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
 #include <libethash-cl/CLMiner.h>
 #endif
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
 #include <libethash-cuda/CUDAMiner.h>
 #endif
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
 #include <libethash-cpu/CPUMiner.h>
 #endif
 #include <libpoolprotocols/PoolManager.h>
@@ -67,7 +67,7 @@ struct MiningChannel : public LogChannel
 
 #define minelog clog(MiningChannel)
 
-#if ETH_DBUS
+#if KECCAK_DBUS
 #include <ethminer/DBusInt.h>
 #endif
 
@@ -111,7 +111,7 @@ public:
                 PoolManager::p().isConnected() ? Farm::f().Telemetry().str() : "Not connected";
             minelog << logLine;
 
-#if ETH_DBUS
+#if KECCAK_DBUS
             dbusint.send(Farm::f().Telemetry().str().c_str());
 #endif
             // Resubmit timer
@@ -226,13 +226,13 @@ public:
         app.add_set("-H,--help-ext", shelpExt,
             {
                 "con", "test",
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
                     "cl",
 #endif
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
                     "cu",
 #endif
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
                     "cp",
 #endif
 #if API_CORE
@@ -307,13 +307,13 @@ public:
 
 #endif
 
-#if ETH_ETHASHCL || ETH_ETHASHCUDA || ETH_ETHASH_CPU
+#if ETC_KECCAKCL || ETC_KECCAKCUDA || ETC_KECCAKCPU
 
         app.add_flag("--list-devices", m_shouldListDevices, "");
 
 #endif
 
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
 
         app.add_option("--opencl-device,--opencl-devices,--cl-devices", m_CLSettings.devices, "");
 
@@ -327,7 +327,7 @@ public:
 
 #endif
 
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
 
         app.add_option("--cuda-devices,--cu-devices", m_CUSettings.devices, "");
 
@@ -346,7 +346,7 @@ public:
 
 #endif
 
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
 
         app.add_option("--cpu-devices,--cp-devices", m_CPSettings.devices, "");
 
@@ -363,7 +363,7 @@ public:
         app.add_flag("-U,--cuda", cuda_miner, "");
 
         bool cpu_miner = false;
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
         app.add_flag("--cpu", cpu_miner, "");
 #endif
         auto sim_opt = app.add_option("-Z,--simulation,-M,--benchmark", m_PoolSettings.benchmarkBlock, "", true);
@@ -470,7 +470,7 @@ public:
         }
 
 
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
         if (sched == "auto")
             m_CUSettings.schedule = 0;
         else if (sched == "spin")
@@ -507,15 +507,15 @@ public:
 
     void execute()
     {
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
         if (m_minerType == MinerType::CL || m_minerType == MinerType::Mixed)
             CLMiner::enumDevices(m_DevicesCollection);
 #endif
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
         if (m_minerType == MinerType::CUDA || m_minerType == MinerType::Mixed)
             CUDAMiner::enumDevices(m_DevicesCollection);
 #endif
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
         if (m_minerType == MinerType::CPU)
             CPUMiner::enumDevices(m_DevicesCollection);
 #endif
@@ -532,20 +532,20 @@ public:
             cout << setw(5) << "Type ";
             cout << setw(30) << "Name                          ";
 
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
             if (m_minerType == MinerType::CUDA || m_minerType == MinerType::Mixed)
             {
                 cout << setw(5) << "CUDA ";
                 cout << setw(4) << "SM  ";
             }
 #endif
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
             if (m_minerType == MinerType::CL || m_minerType == MinerType::Mixed)
                 cout << setw(5) << "CL   ";
 #endif
             cout << resetiosflags(ios::left) << setw(13) << "Total Memory"
                  << " ";
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
             if (m_minerType == MinerType::CL || m_minerType == MinerType::Mixed)
             {
                 cout << resetiosflags(ios::left) << setw(13) << "Cl Max Alloc"
@@ -561,20 +561,20 @@ public:
             cout << setw(5) << "---- ";
             cout << setw(30) << "----------------------------- ";
 
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
             if (m_minerType == MinerType::CUDA || m_minerType == MinerType::Mixed)
             {
                 cout << setw(5) << "---- ";
                 cout << setw(4) << "--- ";
             }
 #endif
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
             if (m_minerType == MinerType::CL || m_minerType == MinerType::Mixed)
                 cout << setw(5) << "---- ";
 #endif
             cout << resetiosflags(ios::left) << setw(13) << "------------"
                  << " ";
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
             if (m_minerType == MinerType::CL || m_minerType == MinerType::Mixed)
             {
                 cout << resetiosflags(ios::left) << setw(13) << "------------"
@@ -606,20 +606,20 @@ public:
                     break;
                 }
                 cout << setw(30) << (it->second.name).substr(0, 28);
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
                 if (m_minerType == MinerType::CUDA || m_minerType == MinerType::Mixed)
                 {
                     cout << setw(5) << (it->second.cuDetected ? "Yes" : "");
                     cout << setw(4) << it->second.cuCompute;
                 }
 #endif
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
                 if (m_minerType == MinerType::CL || m_minerType == MinerType::Mixed)
                     cout << setw(5) << (it->second.clDetected ? "Yes" : "");
 #endif
                 cout << resetiosflags(ios::left) << setw(13)
                      << getFormattedMemory((double)it->second.totalMemory) << " ";
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
                 if (m_minerType == MinerType::CL || m_minerType == MinerType::Mixed)
                 {
                     cout << resetiosflags(ios::left) << setw(13)
@@ -639,7 +639,7 @@ public:
         // Use CUDA first when available then, as second, OpenCL
 
         // Apply discrete subscriptions (if any)
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
         if (m_CUSettings.devices.size() &&
             (m_minerType == MinerType::CUDA || m_minerType == MinerType::Mixed))
         {
@@ -656,7 +656,7 @@ public:
             }
         }
 #endif
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
         if (m_CLSettings.devices.size() &&
             (m_minerType == MinerType::CL || m_minerType == MinerType::Mixed))
         {
@@ -676,7 +676,7 @@ public:
             }
         }
 #endif
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
         if (m_CPSettings.devices.size() && (m_minerType == MinerType::CPU))
         {
             for (auto index : m_CPSettings.devices)
@@ -693,7 +693,7 @@ public:
 
 
         // Subscribe all detected devices
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
         if (!m_CUSettings.devices.size() &&
             (m_minerType == MinerType::CUDA || m_minerType == MinerType::Mixed))
         {
@@ -706,7 +706,7 @@ public:
             }
         }
 #endif
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
         if (!m_CLSettings.devices.size() &&
             (m_minerType == MinerType::CL || m_minerType == MinerType::Mixed))
         {
@@ -719,7 +719,7 @@ public:
             }
         }
 #endif
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
         if (!m_CPSettings.devices.size() &&
             (m_minerType == MinerType::CPU))
         {
@@ -768,13 +768,13 @@ public:
              << "    By default ethminer will try to use all devices types" << endl
              << "    it can detect. Optionally you can limit this behavior" << endl
              << "    setting either of the following options" << endl
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
              << "    -G,--opencl         Mine/Benchmark using OpenCL only" << endl
 #endif
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
              << "    -U,--cuda           Mine/Benchmark using CUDA only" << endl
 #endif
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
              << "    --cpu               Development ONLY ! (NO MINING)" << endl
 #endif
              << endl
@@ -793,13 +793,13 @@ public:
              << endl
              << "    -h,--help           Displays this help text and exits" << endl
              << "    -H,--help-ext       TEXT {'con','test',"
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
              << "cl,"
 #endif
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
              << "cu,"
 #endif
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
              << "cp,"
 #endif
 #if API_CORE
@@ -809,13 +809,13 @@ public:
              << "                        Display help text about one of these contexts:" << endl
              << "                        'con'  Connections and their definitions" << endl
              << "                        'test' Benchmark/Simulation options" << endl
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
              << "                        'cl'   Extended OpenCL options" << endl
 #endif
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
              << "                        'cu'   Extended CUDA options" << endl
 #endif
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
              << "                        'cp'   Extended CPU options" << endl
 #endif
 #if API_CORE
@@ -1291,7 +1291,7 @@ private:
     string m_api_password;              // API interface write protection password
 #endif
 
-#if ETH_DBUS
+#if KECCAK_DBUS
     DBusInt dbusint;
 #endif
 };

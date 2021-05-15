@@ -18,15 +18,15 @@
 
 #include <libethcore/Farm.h>
 
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
 #include <libethash-cl/CLMiner.h>
 #endif
 
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
 #include <libethash-cuda/CUDAMiner.h>
 #endif
 
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
 #include <libethash-cpu/CPUMiner.h>
 #endif
 
@@ -262,7 +262,7 @@ bool Farm::start()
         for (auto it = m_DevicesCollection.begin(); it != m_DevicesCollection.end(); it++)
         {
             TelemetryAccountType minerTelemetry;
-#if ETH_ETHASHCUDA
+#if ETC_KECCAKCUDA
             if (it->second.subscriptionType == DeviceSubscriptionTypeEnum::Cuda)
             {
                 minerTelemetry.prefix = "cu";
@@ -270,7 +270,7 @@ bool Farm::start()
                     new CUDAMiner(m_miners.size(), m_CUSettings, it->second)));
             }
 #endif
-#if ETH_ETHASHCL
+#if ETC_KECCAKCL
 
             if (it->second.subscriptionType == DeviceSubscriptionTypeEnum::OpenCL)
             {
@@ -279,7 +279,7 @@ bool Farm::start()
                     new CLMiner(m_miners.size(), m_CLSettings, it->second)));
             }
 #endif
-#if ETH_ETHASHCPU
+#if ETC_KECCAKCPU
 
             if (it->second.subscriptionType == DeviceSubscriptionTypeEnum::Cpu)
             {

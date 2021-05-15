@@ -28,7 +28,7 @@ This project uses [CMake] and [Hunter] package manager.
 ### Linux
 
 1. GCC version >= 4.8
-2. DBUS development libs if building with `-DETHDBUS`. E.g. on Ubuntu run:
+2. DBUS development libs if building with `-DKECCAKDBUS`. E.g. on Ubuntu run:
 
 ```shell
 sudo apt install libdbus-1-dev
@@ -125,7 +125,7 @@ cd "%~dp0\ethminer\"
 if not exist "build\" mkdir "build\"
 
 rem For CUDA 9.x pass also `-T v140`
-cmake -G "Visual Studio 15 2017 Win64" -H. -Bbuild -DETHASHCL=ON -DETHASHCUDA=ON -DAPICORE=ON ..
+cmake -G "Visual Studio 15 2017 Win64" -H. -Bbuild -DKECCAKCL=ON -DKECCAKCUDA=ON -DAPICORE=ON ..
 cmake --build . --config Release --target package
 
 endlocal
@@ -137,14 +137,14 @@ pause
 Pass these options to CMake configuration command, e.g.
 
 ```shell
-cmake .. -DETHASHCUDA=ON -DETHASHCL=OFF
+cmake .. -DKECCAKCUDA=ON -DKECCAKCL=OFF
 ```
 
-* `-DETHASHCL=ON` - enable OpenCL mining, `ON` by default.
-* `-DETHASHCUDA=ON` - enable CUDA mining, `ON` by default.
+* `-DKECCAKCL=ON` - enable OpenCL mining, `ON` by default.
+* `-DKECCAKCUDA=ON` - enable CUDA mining, `ON` by default.
 * `-DAPICORE=ON` - enable API Server, `ON` by default.
 * `-DBINKERN=ON` - install AMD binary kernels, `ON` by default.
-* `-DETHDBUS=ON` - enable D-Bus support, `OFF` by default.
+* `-DKECCAKDBUS=ON` - enable D-Bus support, `OFF` by default.
 * `-DUSE_SYS_OPENCL=ON` - Use system OpenCL, `OFF` by default, unless on macOS. Specify to use local **ROCm-OpenCL** package.
 
 ## Disable Hunter
