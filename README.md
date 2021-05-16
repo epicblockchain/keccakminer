@@ -1,8 +1,23 @@
+# How to mine ETC on Astor network
+
+
+* Run a node
+```sh
+docker run --name besu --network host hyperledger/besu:develop --rpc-http-enabled --rpc-http-api=admin,eth,debug,miner,net,txpool,priv,trace,web3 --network=astor --miner-enabled --miner-coinbase=09A7839A84c3C38b6BAFfdA88ca457ecF8943FeD --miner-stratum-enabled --miner-stratum-host=0.0.0.0 --miner-stratum-port=8008 --bootnodes=enode://b638fc3dca6181ae97fac2ea0157e8330f5ac8a20c0d4c63aa6f98dcbac4e35b4e023f656757b58c1da7a7b2be9ffad9342e0f769b8cf0f5e35ff73116ff7dfd@3.16.171.213:30303 --sync-mode=FULL
+```
+Add a node name to show up on (http://astor.tmio.io/)
+```sh
+--Xethstats=test_node:astorsecret@astor.tmio.io:80
+```
+* Run a miner
+```sh
+keccakminer -P stratum+tcp://0x09a7839a84c3c38b6baffda88ca457ecf8943fed.gpu:x@127.0.0.1:8008
+```
+
+---
+
 # keccakminer
 
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/RichardLitt/standard-readme)
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)][Gitter]
-[![Releases](https://img.shields.io/github/downloads/ethereum-mining/keccakminer/total.svg)][Releases]
 
 > Ethereum Classic miner with OpenCL, CUDA and stratum support
 
@@ -34,7 +49,6 @@
 
 ## Install
 
-[![Releases](https://img.shields.io/github/downloads/ethereum-mining/keccakminer/total.svg)][Releases]
 
 Standalone **executables** for *Linux*, *macOS* and *Windows* are provided in
 the [Releases] section.
@@ -43,8 +57,6 @@ accessible from command line. The keccakminer is ready to go.
 
 | Builds | Release | Date |
 | ------ | ------- | ---- |
-| Last   | [![GitHub release](https://img.shields.io/github/release/ethereum-mining/keccakminer/all.svg)](https://github.com/ethereum-mining/keccakminer/releases) | [![GitHub Release Date](https://img.shields.io/github/release-date-pre/ethereum-mining/keccakminer.svg)](https://github.com/ethereum-mining/keccakminer/releases) |
-| Stable | [![GitHub release](https://img.shields.io/github/release/ethereum-mining/keccakminer.svg)](https://github.com/ethereum-mining/keccakminer/releases/latest) | [![GitHub Release Date](https://img.shields.io/github/release-date/ethereum-mining/keccakminer.svg)](https://github.com/ethereum-mining/keccakminer/releases/latest) |
 
 
 ## Usage
@@ -88,21 +100,11 @@ Ordered alphabetically. [Contributors statistics since 2015-08-20].
 
 | Name                  | Contact                                                      |     |
 | --------------------- | ------------------------------------------------------------ | --- |
-| Andrea Lanfranchi     | [@AndreaLanfranchi](https://github.com/AndreaLanfranchi)     | ETH: 0xa7e593bde6b5900262cf94e4d75fb040f7ff4727 |
-| EoD                   | [@EoD](https://github.com/EoD)                               |     |
-| Genoil                | [@Genoil](https://github.com/Genoil)                         |     |
-| goobur                | [@goobur](https://github.com/goobur)                         |     |
-| Marius van der Wijden | [@MariusVanDerWijden](https://github.com/MariusVanDerWijden) |     |
-| Paweł Bylica          | [@chfast](https://github.com/chfast)                         |     |
-| Philipp Andreas       | [@smurfy](https://github.com/smurfy)                         |     |
-| Stefan Oberhumer      | [@StefanOberhumer](https://github.com/StefanOberhumer)       |     |
+| Cristian Filipescu    | [@cfilipescu](https://github.com/cfilipescu)     | ETH: 0x09a7839a84c3c38b6baffda88ca457ecf8943fed |
 
 
 ## Contribute
 
-[![Gitter](https://img.shields.io/gitter/room/ethereum-mining/keccakminer.svg)][Gitter]
-
-To meet the community, ask general questions and chat about keccakminer join [the keccakminer channel on Gitter][Gitter].
 
 All bug reports, pull requests and code reviews are very much welcome.
 
@@ -179,11 +181,5 @@ Error: Insufficient CUDA driver: 9010
 You have to upgrade your Nvidia drivers. On Linux, install `nvidia-396` package or newer.
 
 
-[Amazon S3 is needed]: https://docs.travis-ci.com/user/uploading-artifacts/
-[AppVeyor]: https://ci.appveyor.com/project/ethereum-mining/keccakminer
 [cpp-ethereum]: https://github.com/ethereum/cpp-ethereum
-[Contributors statistics since 2015-08-20]: https://github.com/ethereum-mining/keccakminer/graphs/contributors?from=2015-08-20
-[Genoil's fork]: https://github.com/Genoil/cpp-ethereum
-[Gitter]: https://gitter.im/ethereum-mining/keccakminer
-[Releases]: https://github.com/ethereum-mining/keccakminer/releases
-[Travis CI]: https://travis-ci.org/ethereum-mining/keccakminer
+[ethminer]: https://github.com/ethereum-mining/ethminer
