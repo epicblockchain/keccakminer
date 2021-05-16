@@ -492,7 +492,7 @@ void Farm::submitProofAsync(Solution const& _s)
 {
     if (!m_Settings.noEval)
     {
-        Result r = KeccakAux::eval(_s.work.epoch, _s.work.header, _s.nonce);
+        Result r = KeccakAux::eval(_s.work.header, _s.nonce);
         if (r.value > _s.work.boundary)
         {
             accountSolution(_s.midx, SolutionAccountingEnum::Failed);
@@ -500,7 +500,7 @@ void Farm::submitProofAsync(Solution const& _s)
                   << " gave incorrect result. Lower overclocking values if it happens frequently.";
             return;
         }
-        m_onSolutionFound(Solution{_s.nonce, r.mixHash, _s.work, _s.tstamp, _s.midx});
+        m_onSolutionFound(Solution{_s.nonce, h256(), _s.work, _s.tstamp, _s.midx});
     }
     else
         m_onSolutionFound(_s);

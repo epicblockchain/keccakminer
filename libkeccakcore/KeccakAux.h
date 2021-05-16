@@ -30,13 +30,12 @@ namespace etc
 struct Result
 {
     h256 value;
-    h256 mixHash;
 };
 
 class KeccakAux
 {
 public:
-    static Result eval(int epoch, h256 const& _headerHash, uint64_t _nonce) noexcept;
+    static Result eval(h256 const& _headerHash, uint64_t _nonce) noexcept;
 };
 
 struct EpochContext

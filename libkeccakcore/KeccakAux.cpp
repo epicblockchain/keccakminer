@@ -18,16 +18,24 @@
 #include "KeccakAux.h"
 
 #include <ethash/ethash.hpp>
+#include <ethash/keccak.hpp>
 
 using namespace dev;
 using namespace etc;
 
-Result KeccakAux::eval(int epoch, h256 const& _headerHash, uint64_t _nonce) noexcept
+Result KeccakAux::eval(h256 const& _headerHash, uint64_t _nonce) noexcept
 {
-    auto headerHash = ethash::hash256_from_bytes(_headerHash.data());
-    auto& context = ethash::get_global_epoch_context(epoch);
-    auto result = ethash::hash(context, headerHash, _nonce);
-    h256 mix{reinterpret_cast<byte*>(result.mix_hash.bytes), h256::ConstructFromPointer};
-    h256 final{reinterpret_cast<byte*>(result.final_hash.bytes), h256::ConstructFromPointer};
-    return {final, mix};
+    std::array<byte, 40> header;
+    std::array<byte, 8> nonce;
+
+    header.fill(0);
+    nonce.fill(0);
+    
+    toBigEndian(_nonce, nonce);
+
+    memcpy(header.data(), _headerHash.data(), 32);
+    memcpy(header.data() + 32, nonce.data(), 8);
+    auto result = ethash::keccak256(header.data(), 40);
+    h256 final{reinterpret_cast<byte*>(result.bytes), h256::ConstructFromPointer};
+    return {final};
 }
