@@ -14,7 +14,7 @@
 
 using namespace std;
 using namespace dev;
-using namespace eth;
+using namespace etc;
 
 class EthGetworkClient : public PoolClient
 {

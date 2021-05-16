@@ -25,7 +25,7 @@
 
 namespace dev
 {
-namespace eth
+namespace etc
 {
 struct Result
 {
@@ -79,5 +79,5 @@ struct Solution
     unsigned midx;                                 // Originating miner Id
 };
 
-}  // namespace eth
+}  // namespace etc
 }  // namespace dev

@@ -32,7 +32,7 @@
 
 namespace dev
 {
-namespace eth
+namespace etc
 {
 Farm* Farm::m_this = nullptr;
 
@@ -687,5 +687,5 @@ bool Farm::spawn_file_in_bin_dir(const char* filename, const std::vector<std::st
 }
 
 
-}  // namespace eth
+}  // namespace etc
 }  // namespace dev

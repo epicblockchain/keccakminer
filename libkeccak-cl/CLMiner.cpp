@@ -12,11 +12,11 @@
 #include "keccak.h"
 
 using namespace dev;
-using namespace eth;
+using namespace etc;
 
 namespace dev
 {
-namespace eth
+namespace etc
 {
 
 // WARNING: Do not change the value of the following constant
@@ -249,7 +249,7 @@ std::vector<cl::Device> getDevices(
 
 }  // namespace
 
-}  // namespace eth
+}  // namespace etc
 }  // namespace dev
 
 CLMiner::CLMiner(unsigned _index, CLSettings _settings, DeviceDescriptor& _device)

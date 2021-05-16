@@ -49,7 +49,7 @@
 
 using namespace std;
 using namespace dev;
-using namespace dev::eth;
+using namespace dev::etc;
 
 
 // Global vars

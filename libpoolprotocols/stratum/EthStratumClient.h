@@ -20,7 +20,7 @@
 
 using namespace std;
 using namespace dev;
-using namespace dev::eth;
+using namespace dev::etc;
 
 template <typename Verifier>
 class verbose_verification

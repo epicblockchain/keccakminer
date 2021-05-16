@@ -57,7 +57,7 @@ along with keccakminer.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace std;
 using namespace dev;
-using namespace eth;
+using namespace etc;
 
 
 /* ################## OS-specific functions ################## */

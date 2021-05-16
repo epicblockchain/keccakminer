@@ -19,7 +19,7 @@
 
 namespace dev
 {
-namespace eth
+namespace etc
 {
 
 unsigned Miner::s_dagLoadMode = 0;
@@ -189,5 +189,5 @@ void Miner::updateHashRate(uint32_t _groupSize, uint32_t _increment) noexcept
 }
 
 
-}  // namespace eth
+}  // namespace etc
 }  // namespace dev

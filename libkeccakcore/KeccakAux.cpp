@@ -20,7 +20,7 @@
 #include <ethash/ethash.hpp>
 
 using namespace dev;
-using namespace eth;
+using namespace etc;
 
 Result KeccakAux::eval(int epoch, h256 const& _headerHash, uint64_t _nonce) noexcept
 {

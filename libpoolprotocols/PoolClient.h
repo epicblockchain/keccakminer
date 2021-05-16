@@ -13,7 +13,7 @@ using namespace std;
 
 namespace dev
 {
-namespace eth
+namespace etc
 {
 struct Session
 {
@@ -117,5 +117,5 @@ protected:
     Connected m_onConnected;
     WorkReceived m_onWorkReceived;
 };
-}  // namespace eth
+}  // namespace etc
 }  // namespace dev

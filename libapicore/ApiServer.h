@@ -13,7 +13,7 @@
 #include <libpoolprotocols/PoolManager.h>
 
 using namespace dev;
-using namespace dev::eth;
+using namespace dev::etc;
 using namespace std::chrono;
 
 using boost::asio::ip::tcp;

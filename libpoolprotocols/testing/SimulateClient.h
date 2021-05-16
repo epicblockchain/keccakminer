@@ -11,7 +11,7 @@
 
 using namespace std;
 using namespace dev;
-using namespace eth;
+using namespace etc;
 
 class SimulateClient : public PoolClient, Worker
 {

@@ -25,7 +25,7 @@ along with keccakminer.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace dev
 {
-namespace eth
+namespace etc
 {
 class CPUMiner : public Miner
 {
@@ -50,5 +50,5 @@ private:
 };
 
 
-}  // namespace eth
+}  // namespace etc
 }  // namespace dev

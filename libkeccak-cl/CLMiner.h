@@ -38,7 +38,7 @@
 
 namespace dev
 {
-namespace eth
+namespace etc
 {
 class CLMiner : public Miner
 {
@@ -83,5 +83,5 @@ private:
 
 };
 
-}  // namespace eth
+}  // namespace etc
 }  // namespace dev

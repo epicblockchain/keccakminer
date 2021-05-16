@@ -46,7 +46,7 @@ extern boost::asio::io_service g_io_service;
 
 namespace dev
 {
-namespace eth
+namespace etc
 {
 struct FarmSettings
 {
@@ -307,5 +307,5 @@ private:
     std::map<std::string, DeviceDescriptor>& m_DevicesCollection;
 };
 
-}  // namespace eth
+}  // namespace etc
 }  // namespace dev

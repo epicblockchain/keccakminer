@@ -37,7 +37,7 @@ using namespace std;
 
 namespace dev
 {
-namespace eth
+namespace etc
 {
 enum class DeviceTypeEnum
 {
@@ -474,5 +474,5 @@ private:
     atomic<bool> m_hashRateUpdate = {false};
 };
 
-}  // namespace eth
+}  // namespace etc
 }  // namespace dev

@@ -17,7 +17,7 @@ using namespace std;
 
 namespace dev
 {
-namespace eth
+namespace etc
 {
 struct PoolSettings
 {
@@ -96,5 +96,5 @@ private:
     static PoolManager* m_this;
 };
 
-}  // namespace eth
+}  // namespace etc
 }  // namespace dev
