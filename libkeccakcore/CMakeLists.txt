@@ -10,7 +10,7 @@ add_library(ethcore ${SOURCES})
 target_link_libraries(ethcore PUBLIC devcore ethash::ethash PRIVATE hwmon)
 
 if(KECCAKCL)
-	target_link_libraries(ethcore PRIVATE ethash-cl)
+	target_link_libraries(ethcore PRIVATE keccak-cl)
 endif()
 if(KECCAKCUDA)
 	target_link_libraries(ethcore PUBLIC ethash-cuda)

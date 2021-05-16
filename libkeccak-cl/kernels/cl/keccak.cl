@@ -195,63 +195,6 @@ static __constant uint2 const Keccak_f1600_RC[24] = {
 } while(0)
 
 
-#define fnv(x, y)        ((x) * FNV_PRIME ^ (y))
-#define fnv_reduce(v)    fnv(fnv(fnv(v.x, v.y), v.z), v.w)
-
-typedef union {
-    uint uints[128 / sizeof(uint)];
-    ulong ulongs[128 / sizeof(ulong)];
-    uint2 uint2s[128 / sizeof(uint2)];
-    uint4 uint4s[128 / sizeof(uint4)];
-    uint8 uint8s[128 / sizeof(uint8)];
-    uint16 uint16s[128 / sizeof(uint16)];
-    ulong8 ulong8s[128 / sizeof(ulong8)];
-} hash128_t;
-
-
-typedef union {
-    ulong8 ulong8s[1];
-    ulong4 ulong4s[2];
-    uint2 uint2s[8];
-    uint4 uint4s[4];
-    uint8 uint8s[2];
-    uint16 uint16s[1];
-    ulong ulongs[8];
-    uint  uints[16];
-} compute_hash_share;
-
-
-#ifdef LEGACY
-
-#define MIX(x) \
-do { \
-    if (get_local_id(0) == lane_idx) { \
-        buffer[hash_id] = fnv(init0 ^ (a + x), ((uint *)&mix)[x]) % dag_size; \
-    } \
-    barrier(CLK_LOCAL_MEM_FENCE); \
-    uint idx = buffer[hash_id]; \
-    __global hash128_t const* g_dag; \
-    g_dag = (__global hash128_t const*) _g_dag0; \
-    if (idx & 1) \
-        g_dag = (__global hash128_t const*) _g_dag1; \
-    mix = fnv(mix, g_dag[idx >> 1].uint8s[thread_id]); \
-} while(0)
-
-#else
-
-#define MIX(x) \
-do { \
-    buffer[get_local_id(0)] = fnv(init0 ^ (a + x), ((uint *)&mix)[x]) % dag_size; \
-    uint idx = buffer[lane_idx]; \
-    __global hash128_t const* g_dag; \
-    g_dag = (__global hash128_t const*) _g_dag0; \
-    if (idx & 1) \
-        g_dag = (__global hash128_t const*) _g_dag1; \
-    mix = fnv(mix, g_dag[idx >> 1].uint8s[thread_id]); \
-    mem_fence(CLK_LOCAL_MEM_FENCE); \
-} while(0)
-#endif
-
 // NOTE: This struct must match the one defined in CLMiner.cpp
 struct SearchResults {
     struct {
@@ -268,11 +211,8 @@ __attribute__((reqd_work_group_size(WORKSIZE, 1, 1)))
 __kernel void search(
     __global volatile struct SearchResults* restrict g_output,
     __constant uint2 const* g_header,
-    __global ulong8 const* _g_dag0,
-    __global ulong8 const* _g_dag1,
-    uint dag_size,
-    ulong start_nonce,
-    ulong target
+    ulong target,
+    uint start_nonce
 )
 {
 #ifdef FAST_EXIT
@@ -280,29 +220,18 @@ __kernel void search(
         return;
 #endif
 
-    const uint thread_id = get_local_id(0) % 4;
-    const uint hash_id = get_local_id(0) / 4;
     const uint gid = get_global_id(0);
 
-    __local compute_hash_share sharebuf[WORKSIZE / 4];
-#ifdef LEGACY
-    __local uint buffer[WORKSIZE / 4];
-#else
-    __local uint buffer[WORKSIZE];
-#endif
-    __local compute_hash_share * const share = sharebuf + hash_id;
-
-    // sha3_512(header .. nonce)
     uint2 state[25];
     state[0] = g_header[0];
     state[1] = g_header[1];
     state[2] = g_header[2];
     state[3] = g_header[3];
-    state[4] = as_uint2(start_nonce + gid);
+    state[4] = (uint2)(gid,start_nonce);
     state[5] = as_uint2(0x0000000000000001UL);
     state[6] = (uint2)(0);
     state[7] = (uint2)(0);
-    state[8] = as_uint2(0x8000000000000000UL);
+    state[8] = (uint2)(0);
     state[9] = (uint2)(0);
     state[10] = (uint2)(0);
     state[11] = (uint2)(0);
@@ -310,7 +239,7 @@ __kernel void search(
     state[13] = (uint2)(0);
     state[14] = (uint2)(0);
     state[15] = (uint2)(0);
-    state[16] = (uint2)(0);
+    state[16] = as_uint2(0x8000000000000000UL);
     state[17] = (uint2)(0);
     state[18] = (uint2)(0);
     state[19] = (uint2)(0);
@@ -320,80 +249,11 @@ __kernel void search(
     state[23] = (uint2)(0);
     state[24] = (uint2)(0);
 
-    uint2 mixhash[4];
-
-    for (int pass = 0; pass < 2; ++pass) {
-        KECCAK_PROCESS(state, select(5, 12, pass != 0), select(8, 1, pass != 0));
-        if (pass > 0)
-            break;
-
-        uint init0;
-        uint8 mix;
-
-#pragma unroll 1
-        for (uint tid = 0; tid < 4; tid++) {
-            if (tid == thread_id) {
-                share->uint2s[0] = state[0];
-                share->uint2s[1] = state[1];
-                share->uint2s[2] = state[2];
-                share->uint2s[3] = state[3];
-                share->uint2s[4] = state[4];
-                share->uint2s[5] = state[5];
-                share->uint2s[6] = state[6];
-                share->uint2s[7] = state[7];
-            }
-
-            barrier(CLK_LOCAL_MEM_FENCE);
-
-            mix = share->uint8s[thread_id & 1];
-            init0 = share->uints[0];
-
-            barrier(CLK_LOCAL_MEM_FENCE);
-
-#ifndef LEGACY
-#pragma unroll 1
-#endif
-            for (uint a = 0; a < ACCESSES; a += 8) {
-                const uint lane_idx = 4 * hash_id + a / 8 % 4;
-                for (uint x = 0; x < 8; ++x)
-                    MIX(x);
-            }
-
-            barrier(CLK_LOCAL_MEM_FENCE);
-
-            share->uint2s[thread_id] = (uint2)(fnv_reduce(mix.lo), fnv_reduce(mix.hi));
-
-            barrier(CLK_LOCAL_MEM_FENCE);
-
-            if (tid == thread_id) {
-                state[8] = share->uint2s[0];
-                state[9] = share->uint2s[1];
-                state[10] = share->uint2s[2];
-                state[11] = share->uint2s[3];
-            }
-
-            barrier(CLK_LOCAL_MEM_FENCE);
-        }
-
-        mixhash[0] = state[8];
-        mixhash[1] = state[9];
-        mixhash[2] = state[10];
-        mixhash[3] = state[11];
-
-        state[12] = as_uint2(0x0000000000000001UL);
-        state[13] = (uint2)(0);
-        state[14] = (uint2)(0);
-        state[15] = (uint2)(0);
-        state[16] = as_uint2(0x8000000000000000UL);
-        state[17] = (uint2)(0);
-        state[18] = (uint2)(0);
-        state[19] = (uint2)(0);
-        state[20] = (uint2)(0);
-        state[21] = (uint2)(0);
-        state[22] = (uint2)(0);
-        state[23] = (uint2)(0);
-        state[24] = (uint2)(0);
-    }
+#pragma unroll
+    for (int r = 0; r < 24; ++r) { 
+        int os = (r < 23 ? 25 : 4);
+        KECCAKF_1600_RND(state, r, os); 
+    } 
 
 #ifdef FAST_EXIT
     if (get_local_id(0) == 0)
@@ -404,86 +264,16 @@ __kernel void search(
 #ifdef FAST_EXIT
         atomic_inc(&g_output->abort);
 #endif
+
         uint slot = min(MAX_OUTPUTS - 1u, atomic_inc(&g_output->count));
         g_output->rslt[slot].gid = gid;
-        g_output->rslt[slot].mix[0] = mixhash[0].s0;
-        g_output->rslt[slot].mix[1] = mixhash[0].s1;
-        g_output->rslt[slot].mix[2] = mixhash[1].s0;
-        g_output->rslt[slot].mix[3] = mixhash[1].s1;
-        g_output->rslt[slot].mix[4] = mixhash[2].s0;
-        g_output->rslt[slot].mix[5] = mixhash[2].s1;
-        g_output->rslt[slot].mix[6] = mixhash[3].s0;
-        g_output->rslt[slot].mix[7] = mixhash[3].s1;
+        g_output->rslt[slot].mix[0] = state[0].s0;
+        g_output->rslt[slot].mix[1] = state[0].s1;
+        g_output->rslt[slot].mix[2] = state[1].s0;
+        g_output->rslt[slot].mix[3] = state[1].s1;
+        g_output->rslt[slot].mix[4] = state[2].s0;
+        g_output->rslt[slot].mix[5] = state[2].s1;
+        g_output->rslt[slot].mix[6] = state[3].s0;
+        g_output->rslt[slot].mix[7] = state[3].s1;
     }
-}
-
-typedef union _Node {
-    uint dwords[16];
-    uint2 qwords[8];
-    uint4 dqwords[4];
-} Node;
-
-static void SHA3_512(uint2 *s)
-{
-    uint2 st[25];
-
-    for (uint i = 0; i < 8; ++i)
-        st[i] = s[i];
-
-    st[8] = (uint2)(0x00000001, 0x80000000);
-
-    for (uint i = 9; i != 25; ++i)
-        st[i] = (uint2)(0);
-
-    KECCAK_PROCESS(st, 8, 8);
-
-    for (uint i = 0; i < 8; ++i)
-        s[i] = st[i];
-}
-
-__kernel void GenerateDAG(uint start, __global const uint16 *_Cache, __global uint16 *_DAG0, __global uint16 *_DAG1, uint light_size)
-{
-    __global const Node *Cache = (__global const Node *) _Cache;
-    const uint gid = get_global_id(0);
-    uint NodeIdx = start + gid;
-    const uint thread_id = gid & 3;
-
-    __local Node sharebuf[WORKSIZE];
-    __local uint indexbuf[WORKSIZE];
-    __local Node *dagNode = sharebuf + (get_local_id(0) / 4) * 4;
-    __local uint *indexes = indexbuf + (get_local_id(0) / 4) * 4;
-    __global const Node *parentNode;
-
-    Node DAGNode = Cache[NodeIdx % light_size];
-
-    DAGNode.dwords[0] ^= NodeIdx;
-    SHA3_512(DAGNode.qwords);
-
-    dagNode[thread_id] = DAGNode;
-    barrier(CLK_LOCAL_MEM_FENCE);
-    for (uint i = 0; i < 256; ++i) {
-        uint ParentIdx = fnv(NodeIdx ^ i, dagNode[thread_id].dwords[i & 15]) % light_size;
-        indexes[thread_id] = ParentIdx;
-        barrier(CLK_LOCAL_MEM_FENCE);
-
-        for (uint t = 0; t < 4; ++t) {
-            uint parentIndex = indexes[t];
-            parentNode = Cache + parentIndex;
-
-            dagNode[t].dqwords[thread_id] = fnv(dagNode[t].dqwords[thread_id], parentNode->dqwords[thread_id]);
-            barrier(CLK_LOCAL_MEM_FENCE);
-        }
-    }
-    DAGNode = dagNode[thread_id];
-
-    SHA3_512(DAGNode.qwords);
-
-    __global Node *DAG;
-    if (NodeIdx & 2)
-        DAG = (__global Node *) _DAG1;
-    else
-        DAG = (__global Node *) _DAG0;
-    NodeIdx &= ~2;
-    //if (NodeIdx < DAG_SIZE)
-    DAG[(NodeIdx / 2) | (NodeIdx & 1)] = DAGNode;
 }
