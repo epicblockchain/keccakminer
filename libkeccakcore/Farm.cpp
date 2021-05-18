@@ -500,7 +500,7 @@ void Farm::submitProofAsync(Solution const& _s)
                   << " gave incorrect result. Lower overclocking values if it happens frequently.";
             return;
         }
-        m_onSolutionFound(Solution{_s.nonce, h256(), _s.work, _s.tstamp, _s.midx});
+        m_onSolutionFound(Solution{_s.nonce, r.value, _s.work, _s.tstamp, _s.midx});
     }
     else
         m_onSolutionFound(_s);
